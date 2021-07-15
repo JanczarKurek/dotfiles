@@ -35,3 +35,24 @@ if test -z "$DISPLAY" && test "$XDG_VTNR" -eq 1
         $HOME/.config/fish/wait_countdown.sh "Press ^C if you don't want to run sway" 5
         exec sway
 end
+
+# Useful when you've written a long line you'll need later
+
+set -g _funny_line ""
+
+function _store_cmd
+    set current_cmd (commandline)
+    if test -n "$current_cmd"
+        set _funny_line "$current_cmd"
+        commandline ""
+    end
+end
+
+function _restore_cmd
+    if test -n "$_funny_line"
+        commandline "$_funny_line"
+    end
+end
+
+bind \cs '_store_cmd'
+bind \cr '_restore_cmd'
